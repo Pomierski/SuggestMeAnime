@@ -6,7 +6,7 @@ Everything works on client-side thanks to [JikanAPI](https://github.com/jikan-me
 **Remember to check [JikanAPI docs](https://jikan.docs.apiary.io/#introduction/information/rate-limiting) before using**
 
 ## JikanAPI Search visualization
-You can use SuggestMeAnime to visualize [JikanAPI Search](https://jikan.docs.apiary.io/#reference/0/search) request results. If you want to use it this way, don't set your MAL Profile in app because it will filter out anime from your list so the the results will be inaccurate.
+You can use SuggestMeAnime to visualize [JikanAPI Search](https://jikan.docs.apiary.io/#reference/0/search) request results. If you want to use it this way, don't set your MAL Profile in app because it will filter out anime from your list so the results will be inaccurate.
 The Item parameter allows you to move through the results array.
 
 ### Example
