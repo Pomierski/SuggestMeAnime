@@ -61,7 +61,6 @@ const Main = ({
   }, [updatePath]);
 
   useEffect(() => {
-    console.log(location.pathname)
     if (location.pathname !== "/" && location.pathname !== "/SuggestMeAnime/") {
       if (!query && !queryID) {
         const urlParams = location.pathname;
