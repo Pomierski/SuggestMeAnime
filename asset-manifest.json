@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/SuggestMeAnime/static/css/main.6f6343b1.chunk.css",
+    "main.js": "/SuggestMeAnime/static/js/main.5cfd07a0.chunk.js",
+    "main.js.map": "/SuggestMeAnime/static/js/main.5cfd07a0.chunk.js.map",
+    "runtime-main.js": "/SuggestMeAnime/static/js/runtime-main.751d4fa3.js",
+    "runtime-main.js.map": "/SuggestMeAnime/static/js/runtime-main.751d4fa3.js.map",
+    "static/js/2.2c710cfa.chunk.js": "/SuggestMeAnime/static/js/2.2c710cfa.chunk.js",
+    "static/js/2.2c710cfa.chunk.js.map": "/SuggestMeAnime/static/js/2.2c710cfa.chunk.js.map",
+    "static/js/3.ac818bc9.chunk.js": "/SuggestMeAnime/static/js/3.ac818bc9.chunk.js",
+    "static/js/3.ac818bc9.chunk.js.map": "/SuggestMeAnime/static/js/3.ac818bc9.chunk.js.map",
+    "index.html": "/SuggestMeAnime/index.html",
+    "static/css/main.6f6343b1.chunk.css.map": "/SuggestMeAnime/static/css/main.6f6343b1.chunk.css.map",
+    "static/js/2.2c710cfa.chunk.js.LICENSE.txt": "/SuggestMeAnime/static/js/2.2c710cfa.chunk.js.LICENSE.txt",
+    "static/media/404.7f80a004.webm": "/SuggestMeAnime/static/media/404.7f80a004.webm"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.751d4fa3.js",
+    "static/js/2.2c710cfa.chunk.js",
+    "static/css/main.6f6343b1.chunk.css",
+    "static/js/main.5cfd07a0.chunk.js"
+  ]
+}
