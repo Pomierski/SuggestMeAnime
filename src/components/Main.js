@@ -61,7 +61,7 @@ const Main = ({
   }, [updatePath]);
 
   useEffect(() => {
-    if (location.pathname !== "/") {
+    if (location.pathname !== "/" && location.pathname !== "/SuggestMeAnime") {
       if (!query && !queryID) {
         const urlParams = location.pathname;
         const safeQuery = createSafeQueryFromURLParams(urlParams);
