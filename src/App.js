@@ -47,7 +47,7 @@ function App() {
   }, []);
 
   /** Fetches anime from JikanAPI, then sets results as queryResultArray.
-   * Array element from index appointed by item parametr (defautl: 0) is set to queryResultSingleItem
+   * Item from fetched array (defautl index: 0) is set to queryResultSingleItem
    * @param {string} query - search request compatible with JikanAPI schema
    * @param {number} page - sets page of query results
    * @param {number} [item = 0] - index of query results array
@@ -244,7 +244,5 @@ function App() {
     </div>
   );
 }
-
-//bartuś pomug, dzienx @niemam
 
 export default App;
