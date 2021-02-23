@@ -9,14 +9,16 @@ const Title = styled.div`
 
 const GalleryItem = ({ id, title, img, fetchRecommendedAnime }) => (
   <>
-    <Img
-      size="small"
-      src={img}
-      onClick={() => fetchRecommendedAnime(id)}
-      alt={title}
-      width="225px"
-      height="321px"
-    />
+    <div>
+      <Img
+        size="small"
+        src={img}
+        onClick={() => fetchRecommendedAnime(id)}
+        alt={title}
+        width="225px"
+        height="321px"
+      />
+    </div>
     <Title>{title}</Title>
   </>
 );
