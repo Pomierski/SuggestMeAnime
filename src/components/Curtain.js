@@ -7,11 +7,15 @@ const Wrapper = styled.div`
   top: 0;
   left: 0;
   width: 100%;
-  height: 100vh;
+  height: ${`${window.innerHeight}px`};
   background: rgba(0, 0, 0, 0.85);
   justify-content: center;
   align-items: center;
   z-index: 100;
+
+  @media (min-width: ${props => props.theme.screenSizeLg}) {
+    height: 100vh;
+  }
 `;
 
 const Curtain = ({ $display, onClick, children }) => {
