@@ -69,5 +69,4 @@ export const types = [
 export const orderBy = [
   { value: "score", label: "High score" },
   { value: "members", label: "High popularity" },
-  { value: "", label: "None" },
 ];

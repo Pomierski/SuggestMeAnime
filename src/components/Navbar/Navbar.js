@@ -108,7 +108,7 @@ const Navbar = ({ display, fetchAnimeArray, toggleNav }) => {
         },
         { parametr: "type", value: selectedType ? selectedType.value : "" },
       ];
-      const query = `q=&
+      const query = `q=&score=6&
         ${params
           .map((el) => (el.value ? `${el.parametr}=${el.value}&` : ""))
           .join("")}`;

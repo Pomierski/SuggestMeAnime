@@ -5,13 +5,13 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import styled from "styled-components";
 
-import Navbar from "./components/Navbar/Navbar"
+import Navbar from "./components/Navbar/Navbar";
 import BottomNavigation from "./components/Navbar/BottomNavigation";
-import Main from "./components/Main"
-import Loader from "./components/Loader/Loader"
-import Curtain from "./components/Curtain"
-import YoutubeEmbed from './components/YoutubeEmbed';
-import Modal from './components/Modal';
+import Main from "./components/Main";
+import Loader from "./components/Loader/Loader";
+import Curtain from "./components/Curtain";
+import YoutubeEmbed from "./components/YoutubeEmbed";
+import Modal from "./components/Modal";
 import { userData, setUserData } from "./components/userData";
 import { getRandomInt } from "./components/utility";
 
@@ -50,15 +50,15 @@ function App() {
    * Item from fetched array (defautl index: 0) is set to queryResultSingleItem
    * @param {string} query - search request compatible with JikanAPI schema
    * @param {number} page - sets page of query results
-   * @param {number} [item = 0] - index of query results array
+   * @param {number} [item = 0] - index of item
+   * @param {string} orderBy - order_by parametr for query
    * */
   const fetchAnimeArray = useCallback(
     (query, page = 1, item = 0, orderBy = "") => {
       setQuery(query);
       handleLoading();
       fetch(
-        `https://api.jikan.moe/v3/search/anime?${query}order_by=${orderBy}&page=${page}
-      }`
+        `https://api.jikan.moe/v3/search/anime?${query}&order_by=${orderBy}&page=${page}`
       )
         .then((response) => {
           if (response.ok) return response.json();
