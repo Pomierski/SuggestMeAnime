@@ -76,7 +76,7 @@ const Main = ({
       }
     }
     if (location.pathname === "/" || location.pathname === "/SuggestMeAnime/") {
-      fetchAnimeArray("genre=1", 1, 0, "score");
+      fetchAnimeArray("q=", 1, 0, "score");
     }
   }, [fetchSingleAnime, location.pathname, queryID, fetchAnimeArray, query]);
 
