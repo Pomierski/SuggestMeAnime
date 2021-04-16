@@ -12,8 +12,9 @@ import Loader from "./components/Loader/Loader";
 import Curtain from "./components/Curtain";
 import YoutubeEmbed from "./components/YoutubeEmbed";
 import Modal from "./components/Modal";
-import { userData, setUserData } from "./components/userData";
-import { getRandomInt } from "./components/utility";
+import { userData, setUserData } from "./components/utility/userData";
+import { getRandomInt } from "./components/utility/getRandomInt";
+import * as jikanAPI from "./components/utility/jikanAPI";
 
 const Container = styled.div`
   display: flex;
@@ -46,6 +47,12 @@ function App() {
     }
   }, []);
 
+  const updateData = (data, item) => {
+    setQueryResultArray(data);
+    setQueryResultSingleItem(data[item]);
+    setQueryID(data[item].mal_id);
+  };
+
   /** Fetches anime from JikanAPI, then sets results as queryResultArray.
    * Item from fetched array (defautl index: 0) is set to queryResultSingleItem
    * @param {string} query - search request compatible with JikanAPI schema
@@ -54,77 +61,61 @@ function App() {
    * @param {string} orderBy - order_by parametr for query
    * */
   const fetchAnimeArray = useCallback(
-    (query, page = 1, item = 0, orderBy = "") => {
+    async (query, page = 1, item = 0, orderBy = "") => {
       setQuery(query);
       handleLoading();
-      fetch(
-        `https://api.jikan.moe/v3/search/anime?${query}&order_by=${orderBy}&page=${page}`
-      )
-        .then((response) => {
-          if (response.ok) return response.json();
-          else return Promise.reject("404 not found");
-        })
-        .catch((error) => {
-          handleError(error);
-        })
-        .then((response) => {
-          if (userData.animelist) {
-            const filteredOutAnimeOnList = [
-              ...response.results.filter(
-                (responseItem) =>
-                  !userData.animelist.anime.filter(
-                    (userDataItem) =>
-                      userDataItem.mal_id === responseItem.mal_id
-                  ).length
-              ),
-            ];
-            if (filteredOutAnimeOnList.length === 0) {
-              return setTimeout(() => {
-                fetchAnimeArray(query, page + 1, 0);
-              }, 500);
-            }
-            if (orderBy.length === 0)
-              item = getRandomInt(0, filteredOutAnimeOnList.length - 1);
-            setQueryResultArray(filteredOutAnimeOnList);
-            setQueryResultSingleItem(filteredOutAnimeOnList[item]);
-            setQueryID(filteredOutAnimeOnList[item].mal_id);
-          } else {
-            if (orderBy.length === 0)
-              item = getRandomInt(0, response.results.length - 1);
-            setQueryResultArray(response.results);
-            setQueryResultSingleItem(response.results[item]);
-            setQueryID(response.results[item].mal_id);
-          }
 
-          setCurrentIndex({
-            page: page,
-            item: item,
-          });
-        })
-        .catch((error) => {
-          handleError(error);
-        });
+      const data = await jikanAPI.fetchQuery(query, page, orderBy).catch(() => {
+        handleError();
+      });
+
+      if (!data) return;
+
+      if (userData.animelist) {
+        const filteredOutAnimeOnList = [
+          ...data.results.filter(
+            (dataItem) =>
+              !userData.animelist.anime.filter(
+                (userDataItem) => userDataItem.mal_id === dataItem.mal_id
+              ).length
+          ),
+        ];
+        if (filteredOutAnimeOnList.length === 0) {
+          return setTimeout(() => {
+            fetchAnimeArray(query, page + 1, 0);
+          }, 500);
+        }
+        if (orderBy.length === 0)
+          item = getRandomInt(0, filteredOutAnimeOnList.length - 1);
+        updateData(filteredOutAnimeOnList, item);
+      } else {
+        if (orderBy.length === 0)
+          item = getRandomInt(0, data.results.length - 1);
+        updateData(data.results, item);
+      }
+
+      setCurrentIndex({
+        page: page,
+        item: item,
+      });
     },
     []
   );
 
-  const fetchSingleAnime = useCallback((malID) => {
+  const fetchSingleAnime = useCallback(async (malID) => {
     handleLoading();
     setQueryID(malID);
-    fetch(`https://api.jikan.moe/v3/anime/${malID}`)
-      .then((response) => response.json())
-      .then((response) => {
-        setCurrentAnime(() => response);
-      })
-      .catch(() => {
-        handleError();
-      });
-    fetch(`https://api.jikan.moe/v3/anime/${malID}/recommendations`)
-      .then((response) => response.json())
-      .then((response) => {
-        setRecommendationsArray(() => response.recommendations);
-      })
-      .then(() => setShowLoading(false));
+
+    const [anime, recommendations] = await Promise.all([
+      jikanAPI.fetchAnimeByMalID(malID),
+      jikanAPI.fetchAnimeRecommendations(malID),
+    ]).catch(() => {
+      handleError();
+    });
+
+    setCurrentAnime(anime);
+    setRecommendationsArray(recommendations);
+    setShowLoading(false);
   }, []);
 
   useEffect(() => {
@@ -151,7 +142,16 @@ function App() {
     }
   };
 
-  const handleError = (error) => {
+  const fetchRecommendedAnime = (id) => {
+    setCurrentIndex({
+      page: 1,
+      item: 0,
+    });
+    fetchSingleAnime(id);
+    setQueryResultArray([...recommendationsArray]);
+  };
+
+  const handleError = () => {
     setShowLoading(false);
     setShowError(true);
     setQueryResultArray(null);
@@ -180,20 +180,10 @@ function App() {
     setShowModal(!showModal);
   };
 
-  const fetchRecommendedAnime = (id) => {
-    setCurrentIndex({
-      page: 1,
-      item: 0,
-    });
-    fetchSingleAnime(id);
-    setQueryResultArray([...recommendationsArray]);
-  };
-
   return (
     <div className="App">
       <ThemeProvider theme={theme}>
         <Helmet>
-          <meta charSet="utf-8" />
           <title>
             SuggestMeAnime {currentAnime ? `| ${currentAnime.title}` : ""}
           </title>

@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import Brand from "../Brand";
 import Select from "react-select";
-import { genres, ratings, status, types, orderBy } from "../selectOptions";
+import { genres, ratings, status, types, orderBy } from "../utility/selectOptions";
 import Button from "../Button";
 import { motion } from "framer-motion";
-import { getRandomInt } from "../utility";
+import { getRandomInt } from "../utility/getRandomInt";
 
 const Label = styled.label`
   display: block;

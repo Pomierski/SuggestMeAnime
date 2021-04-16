@@ -6,7 +6,7 @@ import SimiliarAnimies from "./SimilarAnimes/SimilarAnimes";
 import AnimeMeta from "./AnimeMeta/AnimeMeta";
 import Error404 from "./404";
 import { useHistory, useLocation } from "react-router-dom";
-import { createSafeQueryFromURLParams } from "./utility";
+import { createSafeQueryFromURLParams } from "./utility/createSafeQueryFromURLParams";
 
 const Wrapper = styled.main`
   margin: 0 auto;
