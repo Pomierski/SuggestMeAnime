@@ -21,7 +21,7 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   height: ${(props) =>
-    props.showTrailer || props.showModal ? "100vh" : "auto"};
+    props.showTrailer || props.showModal ? "100%" : "auto"};
   overflow-y: ${(props) =>
     props.showTrailer || props.showModal ? "hidden" : "initial"};
 `;

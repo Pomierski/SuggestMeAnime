@@ -14,7 +14,7 @@ const Wrapper = styled.div`
   z-index: 100;
 
   @media (min-width: ${props => props.theme.screenSizeLg}) {
-    height: 100vh;
+    height: 100%;
   }
 `;
 
