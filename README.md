@@ -3,6 +3,8 @@
 It's my first finished React application. SuggestMeAnime allows you to discover new exciting anime. 
 Everything works on client-side thanks to [JikanAPI](https://github.com/jikan-me/jikan) and [React-router](https://github.com/ReactTraining/react-router).
 
+# [Live](https://pomierski.github.io/SuggestMeAnime/)
+
 **Remember to check [JikanAPI docs](https://jikan.docs.apiary.io/#introduction/information/rate-limiting) before using**
 
 ## JikanAPI Search visualization
