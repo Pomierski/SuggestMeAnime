@@ -14,10 +14,12 @@
     "react-dom": "^17.0.1",
     "react-helmet": "^6.1.0",
     "react-icons": "^4.1.0",
+    "react-redux": "^7.2.6",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.1",
     "react-select": "^4.0.2",
     "styled-components": "^5.2.1",
+    "typescript": "^3.9.10",
     "web-vitals": "^0.2.4"
   },
   "scripts": {
@@ -45,5 +47,13 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/react": "^17.0.37",
+    "@types/react-dom": "^17.0.11",
+    "@types/react-helmet": "^6.1.4",
+    "@types/react-router-dom": "^5.3.2",
+    "@types/redux": "^3.6.0",
+    "@types/styled-components": "^5.1.18"
   }
 }
