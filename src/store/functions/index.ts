@@ -7,8 +7,6 @@ import { sleep } from "../../utility/sleep";
 import * as actions from "../actions";
 import store from "../store";
 
-const state = store.getState();
-
 /** Fetches anime from JikanAPI, then sets results as queryResultArray.
  * Item from fetched array (defautl index: 0) is set to queryResultSingleItem
  * @param {string} query - search request compatible with JikanAPI schema
@@ -132,13 +130,16 @@ export const handleModal = (data: StorageData) => {
 };
 
 export const toggleNav = () => {
+  const state = store.getState();
   store.dispatch(actions.showNav(!state.ui.showNav));
 };
 
 export const toggleTrailer = () => {
+  const state = store.getState();
   store.dispatch(actions.showTrailer(!state.ui.showTrailer));
 };
 
 export const toggleModal = () => {
+  const state = store.getState();
   store.dispatch(actions.showModal(!state.ui.showModal));
 };

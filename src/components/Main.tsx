@@ -6,6 +6,7 @@ import { fetchAnimeArray, fetchSingleAnime } from "../store/functions";
 import { Store } from "../store/reducers";
 import { createSafeQueryFromURLParams } from "../utility/createSafeQueryFromURLParams";
 import { ImageSize, getImage } from "../utility/getImage";
+import { getYoutubeEmberUrl } from "../utility/getYoutubeEmbedUrl";
 import AnimeDesc from "./AnimeDesc/AnimeDesc";
 import AnimeMeta from "./AnimeMeta/AnimeMeta";
 import AnimePoster from "./AnimePoster/AnimePoster";
@@ -95,7 +96,7 @@ const Main = ({ onClick }: PropTypes) => {
             titleJpn={currentAnime.title_japanese}
             desc={currentAnime.synopsis}
             url={currentAnime.url}
-            trailerUrl={currentAnime.trailer.url}
+            trailerUrl={getYoutubeEmberUrl(currentAnime.trailer.youtube_id)}
           />
           <SimiliarAnimies />
           <AnimeMeta score={currentAnime.score} anime={currentAnime} />

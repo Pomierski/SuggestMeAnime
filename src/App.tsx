@@ -13,6 +13,7 @@ import * as actions from "./store/actions/index";
 import { fetchSingleAnime, toggleTrailer } from "./store/functions";
 import { Store, StoreUi } from "./store/reducers";
 import theme from "./styles/theme";
+import { getYoutubeEmberUrl } from "./utility/getYoutubeEmbedUrl";
 
 const Container = styled.div<Partial<StoreUi>>`
   display: flex;
@@ -53,7 +54,7 @@ function App() {
           <Container showTrailer={showTrailer}>
             <Curtain $display={showTrailer} onClick={toggleTrailer}>
               <YoutubeEmbed
-                videoUrl={currentAnime?.trailer.url || ""}
+                videoUrl={getYoutubeEmberUrl(currentAnime?.trailer.youtube_id)}
                 title={currentAnime?.title || ""}
               />
             </Curtain>
