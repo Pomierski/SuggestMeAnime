@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { fetchAnimeArray, fetchSingleAnime } from "../store/functions";
 import { Store } from "../store/reducers";
 import { createSafeQueryFromURLParams } from "../utility/createSafeQueryFromURLParams";
+import { ImageSize, getImage } from "../utility/getImage";
 import AnimeDesc from "./AnimeDesc/AnimeDesc";
 import AnimeMeta from "./AnimeMeta/AnimeMeta";
 import AnimePoster from "./AnimePoster/AnimePoster";
@@ -70,7 +71,7 @@ const Main = ({ onClick }: PropTypes) => {
             safeQuery.query,
             safeQuery.page,
             safeQuery.item,
-            safeQuery.order_by
+            safeQuery.order_by ?? "score"
           );
       }
     }
@@ -85,7 +86,7 @@ const Main = ({ onClick }: PropTypes) => {
       {!currentAnime || showError || showLoading ? null : (
         <>
           <AnimePoster
-            src={currentAnime.image_url}
+            src={getImage(currentAnime, ImageSize.lg)}
             alt={currentAnime.title}
             rating={currentAnime.rating}
           />
@@ -94,7 +95,7 @@ const Main = ({ onClick }: PropTypes) => {
             titleJpn={currentAnime.title_japanese}
             desc={currentAnime.synopsis}
             url={currentAnime.url}
-            trailerUrl={currentAnime.trailer_url}
+            trailerUrl={currentAnime.trailer.url}
           />
           <SimiliarAnimies />
           <AnimeMeta score={currentAnime.score} anime={currentAnime} />

@@ -1,10 +1,11 @@
 import React from "react";
 import styled from "styled-components";
-import { APIData } from "../../../types/APIData";
+import { APIRecommendationsData } from "../../../types/APIData";
+import { ImageSize, getImage } from "../../../utility/getImage";
 import GalleryItem from "./GalleryItem";
 
 interface PropTypes {
-  recommendations: APIData[];
+  recommendations: APIRecommendationsData[];
 }
 
 const Wrapper = styled.div`
@@ -24,17 +25,14 @@ const Wrapper = styled.div`
 const Gallery = ({ recommendations }: PropTypes) => (
   <Wrapper>
     {recommendations
-      ? recommendations.map((item) => {
-          if (!item.image_url) item.image_url = "";
-          return (
-            <GalleryItem
-              key={item.mal_id}
-              id={item.mal_id}
-              title={item.title}
-              img={item.image_url}
-            />
-          );
-        })
+      ? recommendations.map((item) => (
+          <GalleryItem
+            key={item.entry.mal_id}
+            id={item.entry.mal_id}
+            title={item.entry.title}
+            img={getImage(item.entry, ImageSize.md)}
+          />
+        ))
       : null}
   </Wrapper>
 );

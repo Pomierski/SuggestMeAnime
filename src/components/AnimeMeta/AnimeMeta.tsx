@@ -34,7 +34,7 @@ const AnimeMeta = ({ score, anime }: PropTypes) => (
     </SectionHeader>
     <SectionDesc>Ranked: #{anime.rank}</SectionDesc>
     <MetaFragment title="popularity">{"#" + anime.popularity}</MetaFragment>
-    <MetaFragment title="premiered">{anime.premiered}</MetaFragment>
+    <MetaFragment title="premiered">{anime.aired?.string}</MetaFragment>
     <MetaFragment title="status">{anime.status}</MetaFragment>
     <MetaFragment title="episodes"> {anime.episodes}</MetaFragment>
     <MetaFragment title="duration"> {anime.duration}</MetaFragment>

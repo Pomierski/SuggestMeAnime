@@ -33,7 +33,7 @@ export const fetchAnimeArray = async (
 
   if (userData.animelist) {
     const filteredOutAnimeOnList = [
-      ...data.results.filter(
+      ...data.data.filter(
         (dataItem: APIData) =>
           !userData.animelist.anime.filter(
             (userDataItem: APIData) => userDataItem.mal_id === dataItem.mal_id
@@ -50,8 +50,8 @@ export const fetchAnimeArray = async (
       actions.updateData({ data: filteredOutAnimeOnList, item: item })
     );
   } else {
-    if (!orderBy?.length) item = getRandomInt(0, data.results.length - 1);
-    store.dispatch(actions.updateData({ data: data.results, item: item }));
+    if (!orderBy?.length) item = getRandomInt(0, data.data.length - 1);
+    store.dispatch(actions.updateData({ data: data.data, item: item }));
   }
 
   store.dispatch(
@@ -74,11 +74,11 @@ export const fetchSingleAnime = async (malID: number) => {
     }),
   ]);
 
-  if (anime && recommendations) {
+  if (anime?.data && recommendations) {
     store.dispatch(
       actions.setSingleAnime({
-        recommendations: recommendations,
-        anime: anime,
+        recommendations: recommendations.data,
+        anime: anime.data as APIData,
       })
     );
     store.dispatch(actions.showLoading(false));

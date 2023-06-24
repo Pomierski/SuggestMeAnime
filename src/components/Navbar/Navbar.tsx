@@ -101,9 +101,9 @@ const Navbar = ({ display }: PropTypes) => {
   };
 
   const createQuery = () => {
-    let query = `q=&score=6`;
+    let query = `q=&min_score=6`;
     Object.keys(search)
-      .filter((key) => key !== "order")
+      .filter((key) => key !== "order" && search[key as keyof StoreSearch])
       .forEach((key) => {
         query += `&${key}=${search[key as keyof StoreSearch]}`;
       });
@@ -115,7 +115,7 @@ const Navbar = ({ display }: PropTypes) => {
     const query = `q=&genre=${getRandomInt(
       1,
       jikanAPI.genre.length - 1
-    )}&score=6`;
+    )}&min_score=6`;
     const page = getRandomInt(1, 3);
     fetchAnimeArray(query, page, 0);
     toggleNav();

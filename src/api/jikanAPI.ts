@@ -1,27 +1,26 @@
-import { APIData } from "../types/APIData";
+import { APIData, APIRecommendationsData } from "../types/APIData";
 
-interface QueryResult {
-  results: APIData[];
+interface QueryResult<T> {
+  data: T;
 }
 
 export const fetchQuery = async (
   query: string,
   page: number,
   orderBy: string | null
-): Promise<QueryResult> =>
+): Promise<QueryResult<APIData[]>> =>
   fetch(
-    `https://api.jikan.moe/v3/search/anime?${query}&order_by=${orderBy}&page=${page}`
+    `https://api.jikan.moe/v4/anime?${query}${orderBy ? `&order_by=${orderBy}` : ''}&page=${page}&sfw&sort=desc`
   ).then((response) => (response.ok ? response.json() : Promise.reject("404")));
 
-export const fetchAnimeByMalID = (malID: number): Promise<APIData> =>
-  fetch(`https://api.jikan.moe/v3/anime/${malID}`).then((response) =>
+export const fetchAnimeByMalID = (malID: number): Promise<QueryResult<APIData>> =>
+  fetch(`https://api.jikan.moe/v4/anime/${malID}`).then((response) =>
     response.ok ? response.json() : Promise.reject("404")
   );
 
-export const fetchAnimeRecommendations = (malID: number): Promise<APIData[]> =>
-  fetch(`https://api.jikan.moe/v3/anime/${malID}/recommendations`)
+export const fetchAnimeRecommendations = (malID: number): Promise<QueryResult<APIRecommendationsData[]>> =>
+  fetch(`https://api.jikan.moe/v4/anime/${malID}/recommendations`)
     .then((response) => (response.ok ? response.json() : Promise.reject("404")))
-    .then((response) => response.recommendations);
 
 export const genre = [
   { value: "1", label: "Action" },

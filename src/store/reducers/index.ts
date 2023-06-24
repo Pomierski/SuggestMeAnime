@@ -1,5 +1,5 @@
 import { AnyAction } from "redux";
-import { APIData } from "../../types/APIData";
+import { APIData, APIRecommendationsData } from "../../types/APIData";
 
 export interface Store {
   data: StoreData;
@@ -19,7 +19,7 @@ export interface StoreData {
   queryResultSingleItem: APIData | null;
   currentAnime: APIData | null;
   currentIndex: Index;
-  recommendationsArray: APIData[];
+  recommendationsArray: APIRecommendationsData[];
 }
 
 export interface StoreUi {

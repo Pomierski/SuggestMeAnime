@@ -1,23 +1,16 @@
 import React, { useEffect } from "react";
 import { Helmet } from "react-helmet";
 import { useDispatch, useSelector } from "react-redux";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
 import styled, { ThemeProvider } from "styled-components";
-import { userData } from "./api/storage";
 import Curtain from "./components/Curtain";
 import Loader from "./components/Loader/Loader";
 import Main from "./components/Main";
-import Modal from "./components/Modal";
 import BottomNavigation from "./components/Navbar/BottomNavigation";
 import Navbar from "./components/Navbar/Navbar";
 import YoutubeEmbed from "./components/YoutubeEmbed";
 import * as actions from "./store/actions/index";
-import {
-  fetchSingleAnime,
-  handleModal,
-  toggleModal,
-  toggleTrailer,
-} from "./store/functions";
+import { fetchSingleAnime, toggleTrailer } from "./store/functions";
 import { Store, StoreUi } from "./store/reducers";
 import theme from "./styles/theme";
 
@@ -36,17 +29,11 @@ function App() {
   const { queryResultSingleItem, currentAnime } = useSelector(
     (state: Store) => state.data
   );
-  const { showLoading, showNav, showTrailer, showModal } = useSelector(
+  const { showLoading, showNav, showTrailer } = useSelector(
     (state: Store) => state.ui
   );
 
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (!userData.username && !userData.dontShowAgain) {
-      dispatch(actions.showModal(true));
-    }
-  }, [dispatch]);
 
   useEffect(() => {
     if (queryResultSingleItem) {
@@ -66,12 +53,9 @@ function App() {
           <Container showTrailer={showTrailer}>
             <Curtain $display={showTrailer} onClick={toggleTrailer}>
               <YoutubeEmbed
-                videoUrl={currentAnime?.trailer_url || ""}
+                videoUrl={currentAnime?.trailer.url || ""}
                 title={currentAnime?.title || ""}
               />
-            </Curtain>
-            <Curtain $display={showModal} onClick={toggleModal}>
-              <Modal onApply={handleModal} />
             </Curtain>
             <Navbar display={showNav} />
             {showLoading ? <Loader /> : null}
