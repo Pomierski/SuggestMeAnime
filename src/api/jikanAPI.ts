@@ -77,7 +77,7 @@ export const rating = [
 
 export const status = [
   { value: "airing", label: "Airing" },
-  { value: "completed", label: "Completed" },
+  { value: "complete", label: "Completed" },
   { value: "upcoming", label: "Upcoming" },
 ];
 
