@@ -1,5 +1,5 @@
 import { AnyAction } from "redux";
-import { APIData } from "../../types/APIData";
+import { APIData, APIRecommendationsData } from "../../types/APIData";
 import { Index, StoreSearch } from "../reducers";
 
 const createAction = (
@@ -29,7 +29,7 @@ export const setCurrentIndex = (payload: Index) =>
 export const setRecommendationsArray = (arr: APIData[]) =>
   createAction("data/setRecommendationsArray", arr);
 export const setSingleAnime = (payload: {
-  recommendations: APIData[];
+  recommendations: APIRecommendationsData[];
   anime: APIData;
 }) =>
   createAction("data/setSingleAnime", {
