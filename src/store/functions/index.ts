@@ -1,9 +1,6 @@
 import * as jikanAPI from "../../api/jikanAPI";
-import { saveUserData, userData } from "../../api/storage";
 import { APIData } from "../../types/APIData";
-import { StorageData } from "../../types/StorageData";
 import { getRandomInt } from "../../utils/getRandomInt";
-import { sleep } from "../../utils/sleep";
 import * as actions from "../actions";
 import store from "../store";
 
@@ -30,28 +27,8 @@ export const fetchAnimeArray = async (
 
   if (!result) return;
 
-  if (userData.animelist) {
-    const filteredOutAnimeOnList = [
-      ...result.data.filter(
-        (dataItem: APIData) =>
-          !userData.animelist.anime.filter(
-            (userDataItem: APIData) => userDataItem.mal_id === dataItem.mal_id
-          ).length
-      ),
-    ];
-    if (!filteredOutAnimeOnList.length) {
-      await sleep(500);
-      return fetchAnimeArray(query, page + 1, 0);
-    }
-    if (!orderBy?.length)
-      item = getRandomInt(0, filteredOutAnimeOnList.length - 1);
-    store.dispatch(
-      actions.updateData({ data: filteredOutAnimeOnList, item: item })
-    );
-  } else {
-    if (!orderBy?.length) item = getRandomInt(0, result.data.length - 1);
-    store.dispatch(actions.updateData({ data: result.data, item: item }));
-  }
+  if (!orderBy?.length) item = getRandomInt(0, result.data.length - 1);
+  store.dispatch(actions.updateData({ data: result.data, item: item }));
 
   store.dispatch(
     actions.setCurrentIndex({
@@ -129,11 +106,6 @@ export const loadNextAnime = async () => {
       );
     }
   }
-};
-
-export const handleModal = (data: StorageData) => {
-  saveUserData(data.username, data.dontShowAgain);
-  store.dispatch(actions.showModal(false));
 };
 
 export const toggleNav = () => {
