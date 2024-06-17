@@ -26,7 +26,7 @@ const SimiliarAnimies = () => {
 
   return (
     <Wrapper>
-      {recommendationsArray ? (
+      {recommendationsArray.length > 0 ? (
         <>
           <SectionHeader>Similar animes</SectionHeader>
           <SectionDesc>Recommended by users</SectionDesc>
