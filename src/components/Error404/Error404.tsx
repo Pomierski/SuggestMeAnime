@@ -45,7 +45,8 @@ const ErrorMessage = styled.div`
 const Error404 = () => (
   <Wrapper>
     <ErrorMessage>
-      <p>Anime not found.</p> Check your search options or internet connection
+      <p>No results not found.</p> Change your search options or check internet
+      connection
     </ErrorMessage>
     <StyledVideo autoPlay loop>
       <source src={ErrorImage} type="video/mp4" />

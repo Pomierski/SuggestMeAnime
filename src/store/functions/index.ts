@@ -25,7 +25,10 @@ export const fetchAnimeArray = async (
     store.dispatch(actions.handleError());
   });
 
-  if (!result) return;
+  if (!result || result.data.length === 0) {
+    store.dispatch(actions.handleError());
+    return;
+  }
 
   if (!orderBy?.length) item = getRandomInt(0, result.data.length - 1);
   store.dispatch(actions.updateData({ data: result.data, item: item }));
