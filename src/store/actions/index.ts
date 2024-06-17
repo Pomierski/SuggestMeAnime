@@ -7,7 +7,6 @@ export enum StoreDataAction {
   updateData = "data/updateData",
   updateQuery = "data/updateQuery",
   updateQueryID = "data/updateQueryID",
-  updateQueryResultSingleItem = "data/updateQueryResultSingleItem",
   updateQueryResultArray = "data/updateQueryResultArray",
   setCurrentAnime = "data/setCurrentAnime",
   setCurrentIndex = "data/setCurrentIndex",
@@ -52,8 +51,6 @@ export const updateQuery = (query: string) =>
   createAction(StoreDataAction.updateQuery, query);
 export const updateQueryID = (id: number) =>
   createAction(StoreDataAction.updateQueryID, id);
-export const updateQueryResultSingleItem = (item: APIData) =>
-  createAction(StoreDataAction.updateQueryResultSingleItem, item);
 export const updateQueryResultArray = (arr: Partial<APIData>[]) =>
   createAction(StoreDataAction.updateQueryResultArray, arr);
 export const setCurrentAnime = (item: APIData) =>

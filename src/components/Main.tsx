@@ -50,10 +50,9 @@ const Wrapper = styled.main`
 `;
 
 const Main = ({ onClick }: PropTypes) => {
-  let history = useHistory();
-  let location = useLocation();
-
-  const { query, queryID, currentAnime, isInitialized } = useSelector(
+  const history = useHistory();
+  const location = useLocation();
+  const { queryID, currentAnime, isInitialized } = useSelector(
     (state: Store) => state.data
   );
   const { showError, showLoading } = useSelector((state: Store) => state.ui);
@@ -69,27 +68,28 @@ const Main = ({ onClick }: PropTypes) => {
   }, [updatePath]);
 
   useEffect(() => {
+    if (isInitialized) {
+      return;
+    }
     if (isDefaultPathname(location.pathname)) {
       fetchAnimeArray("q=", 1, 0, "score");
       setIsInitialized();
     }
-    if (!isDefaultPathname(location.pathname) && !isInitialized) {
-      if (!query && !queryID) {
-        const urlParams = location.pathname;
-        const safeQuery = createSafeQueryFromURLParams(urlParams);
-        if (safeQuery.mal_id) {
-          fetchSingleAnime(safeQuery.mal_id);
-          return;
-        }
-        fetchAnimeArray(
-          safeQuery.query,
-          safeQuery.page,
-          safeQuery.item,
-          safeQuery.order_by ?? "score"
-        );
+    if (!isDefaultPathname(location.pathname)) {
+      const urlParams = location.pathname;
+      const safeQuery = createSafeQueryFromURLParams(urlParams);
+      if (safeQuery.mal_id) {
+        fetchSingleAnime(safeQuery.mal_id);
+        return;
       }
+      fetchAnimeArray(
+        safeQuery.query,
+        safeQuery.page,
+        safeQuery.item,
+        safeQuery.order_by ?? "score"
+      );
     }
-  }, [location.pathname]);
+  }, [isInitialized, location.pathname]);
 
   return (
     <Wrapper onClick={onClick}>

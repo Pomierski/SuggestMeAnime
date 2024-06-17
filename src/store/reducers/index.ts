@@ -21,7 +21,6 @@ export interface StoreData {
   query: string | null;
   queryID: number | null;
   queryResultArray: APIData[];
-  queryResultSingleItem: APIData | null;
   currentAnime: APIData | null;
   currentIndex: Index;
   recommendationsArray: APIRecommendationsData[];
@@ -49,7 +48,6 @@ const initialState: Store = {
     query: null,
     queryID: null,
     queryResultArray: [],
-    queryResultSingleItem: null,
     currentAnime: null,
     currentIndex: { page: 1, item: 0 },
     recommendationsArray: [],
@@ -99,18 +97,12 @@ const rootReducer = (state = initialState, action: StoreAction) => {
     case StoreDataAction.updateData: {
       return updateState(state, StoreKey.data, {
         queryResultArray: action.payload.data,
-        queryResultSingleItem: action.payload.data[action.payload.item],
         queryID: action.payload.data[action.payload.item].mal_id,
       });
     }
     case StoreDataAction.updateQueryResultArray: {
       return updateState(state, StoreKey.data, {
         queryResultArray: [...action.payload],
-      });
-    }
-    case StoreDataAction.updateQueryResultSingleItem: {
-      return updateState(state, StoreKey.data, {
-        queryResultSingleItem: action.payload,
       });
     }
     case StoreDataAction.updateQuery: {

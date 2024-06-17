@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Helmet } from "react-helmet";
 import { useDispatch, useSelector } from "react-redux";
 import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
@@ -10,7 +10,7 @@ import BottomNavigation from "./components/Navbar/BottomNavigation";
 import Navbar from "./components/Navbar/Navbar";
 import YoutubeEmbed from "./components/YoutubeEmbed";
 import * as actions from "./store/actions/index";
-import { fetchSingleAnime, toggleTrailer } from "./store/functions";
+import { toggleTrailer } from "./store/functions";
 import { Store, StoreUi } from "./store/reducers";
 import theme from "./styles/theme";
 import { getYoutubeEmberUrl } from "./utils/getYoutubeEmbedUrl";
@@ -27,20 +27,12 @@ const Container = styled.div<Partial<StoreUi>>`
 `;
 
 function App() {
-  const { queryResultSingleItem, currentAnime } = useSelector(
-    (state: Store) => state.data
-  );
+  const { currentAnime } = useSelector((state: Store) => state.data);
   const { showLoading, showNav, showTrailer } = useSelector(
     (state: Store) => state.ui
   );
 
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (queryResultSingleItem) {
-      fetchSingleAnime(queryResultSingleItem.mal_id as number);
-    }
-  }, [queryResultSingleItem]);
 
   return (
     <div className="App">

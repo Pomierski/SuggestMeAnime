@@ -8,7 +8,7 @@ import * as actions from "../actions";
 import store from "../store";
 
 /** Fetches anime from JikanAPI, then sets results as queryResultArray.
- * Item from fetched array (defautl index: 0) is set to queryResultSingleItem
+ * First item from fetched array is set as currentAnime if it's unset
  * @param {string} query - search request compatible with JikanAPI schema
  * @param {number} page - sets page of query results
  * @param {number} [item = 0] - index of item
@@ -20,18 +20,19 @@ export const fetchAnimeArray = async (
   item: number = 0,
   orderBy: string | null = ""
 ): Promise<void> => {
+  const storeState = store.getState();
   store.dispatch(actions.updateQuery(query));
   store.dispatch(actions.handleLoading());
 
-  const data = await jikanAPI.fetchQuery(query, page, orderBy).catch(() => {
+  const result = await jikanAPI.fetchQuery(query, page, orderBy).catch(() => {
     store.dispatch(actions.handleError());
   });
 
-  if (!data) return;
+  if (!result) return;
 
   if (userData.animelist) {
     const filteredOutAnimeOnList = [
-      ...data.data.filter(
+      ...result.data.filter(
         (dataItem: APIData) =>
           !userData.animelist.anime.filter(
             (userDataItem: APIData) => userDataItem.mal_id === dataItem.mal_id
@@ -48,8 +49,8 @@ export const fetchAnimeArray = async (
       actions.updateData({ data: filteredOutAnimeOnList, item: item })
     );
   } else {
-    if (!orderBy?.length) item = getRandomInt(0, data.data.length - 1);
-    store.dispatch(actions.updateData({ data: data.data, item: item }));
+    if (!orderBy?.length) item = getRandomInt(0, result.data.length - 1);
+    store.dispatch(actions.updateData({ data: result.data, item: item }));
   }
 
   store.dispatch(
@@ -58,6 +59,10 @@ export const fetchAnimeArray = async (
       item: item,
     })
   );
+
+  if (!storeState.data.currentAnime && result.data[0]) {
+    fetchSingleAnime(result.data[0].mal_id);
+  }
 };
 
 export const fetchSingleAnime = async (malID: number) => {
@@ -97,11 +102,15 @@ export const fetchRecommendedAnime = (id: number) => {
   );
 };
 
-export const loadNextAnime = () => {
+export const loadNextAnime = async () => {
   const { data, ui } = store.getState();
   if (!ui.showError && data.queryResultArray) {
     if (data.currentIndex.item === data.queryResultArray.length - 1) {
-      fetchAnimeArray(data.query as string, data.currentIndex.page + 1, 0);
+      await fetchAnimeArray(
+        data.query as string,
+        data.currentIndex.page + 1,
+        0
+      );
       store.dispatch(
         actions.setCurrentIndex({
           page: data.currentIndex.page + 1,
@@ -109,10 +118,8 @@ export const loadNextAnime = () => {
         })
       );
     } else if (data.currentIndex.item < data.queryResultArray.length) {
-      store.dispatch(
-        actions.updateQueryResultSingleItem(
-          data.queryResultArray[data.currentIndex.item + 1]
-        )
+      await fetchSingleAnime(
+        data.queryResultArray[data.currentIndex.item + 1].mal_id
       );
       store.dispatch(
         actions.setCurrentIndex({
