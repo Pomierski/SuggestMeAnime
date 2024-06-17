@@ -2,11 +2,16 @@ import React, { useCallback, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useHistory, useLocation } from "react-router-dom";
 import styled from "styled-components";
-import { fetchAnimeArray, fetchSingleAnime } from "../store/functions";
+import {
+  fetchAnimeArray,
+  fetchSingleAnime,
+  setIsInitialized,
+} from "../store/functions";
 import { Store } from "../store/reducers";
-import { createSafeQueryFromURLParams } from "../utility/createSafeQueryFromURLParams";
-import { ImageSize, getImage } from "../utility/getImage";
-import { getYoutubeEmberUrl } from "../utility/getYoutubeEmbedUrl";
+import { createSafeQueryFromURLParams } from "../utils/createSafeQueryFromURLParams";
+import { ImageSize, getImage } from "../utils/getImage";
+import { getYoutubeEmberUrl } from "../utils/getYoutubeEmbedUrl";
+import { isDefaultPathname } from "../utils/isDefaultPathname";
 import AnimeDesc from "./AnimeDesc/AnimeDesc";
 import AnimeMeta from "./AnimeMeta/AnimeMeta";
 import AnimePoster from "./AnimePoster/AnimePoster";
@@ -48,13 +53,15 @@ const Main = ({ onClick }: PropTypes) => {
   let history = useHistory();
   let location = useLocation();
 
-  const { query, queryID, currentAnime } = useSelector(
+  const { query, queryID, currentAnime, isInitialized } = useSelector(
     (state: Store) => state.data
   );
   const { showError, showLoading } = useSelector((state: Store) => state.ui);
 
   const updatePath = useCallback(() => {
-    if (queryID) history.replace(`&mal_id=${queryID}`);
+    if (queryID) {
+      history.replace(`&mal_id=${queryID}`);
+    }
   }, [history, queryID]);
 
   useEffect(() => {
@@ -62,24 +69,27 @@ const Main = ({ onClick }: PropTypes) => {
   }, [updatePath]);
 
   useEffect(() => {
-    if (location.pathname !== "/" && location.pathname !== "/SuggestMeAnime/") {
+    if (isDefaultPathname(location.pathname)) {
+      fetchAnimeArray("q=", 1, 0, "score");
+      setIsInitialized();
+    }
+    if (!isDefaultPathname(location.pathname) && !isInitialized) {
       if (!query && !queryID) {
         const urlParams = location.pathname;
         const safeQuery = createSafeQueryFromURLParams(urlParams);
-        if (safeQuery.mal_id) fetchSingleAnime(safeQuery.mal_id);
-        else
-          fetchAnimeArray(
-            safeQuery.query,
-            safeQuery.page,
-            safeQuery.item,
-            safeQuery.order_by ?? "score"
-          );
+        if (safeQuery.mal_id) {
+          fetchSingleAnime(safeQuery.mal_id);
+          return;
+        }
+        fetchAnimeArray(
+          safeQuery.query,
+          safeQuery.page,
+          safeQuery.item,
+          safeQuery.order_by ?? "score"
+        );
       }
     }
-    if (location.pathname === "/" || location.pathname === "/SuggestMeAnime/") {
-      fetchAnimeArray("q=", 1, 0, "score");
-    }
-  }, [location.pathname, queryID, query]);
+  }, [location.pathname]);
 
   return (
     <Wrapper onClick={onClick}>

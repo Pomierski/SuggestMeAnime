@@ -2,8 +2,8 @@ import * as jikanAPI from "../../api/jikanAPI";
 import { saveUserData, userData } from "../../api/storage";
 import { APIData } from "../../types/APIData";
 import { StorageData } from "../../types/StorageData";
-import { getRandomInt } from "../../utility/getRandomInt";
-import { sleep } from "../../utility/sleep";
+import { getRandomInt } from "../../utils/getRandomInt";
+import { sleep } from "../../utils/sleep";
 import * as actions from "../actions";
 import store from "../store";
 
@@ -142,4 +142,8 @@ export const toggleTrailer = () => {
 export const toggleModal = () => {
   const state = store.getState();
   store.dispatch(actions.showModal(!state.ui.showModal));
+};
+
+export const setIsInitialized = () => {
+  store.dispatch(actions.updateIsDataInitialized(true));
 };

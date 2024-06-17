@@ -1,5 +1,10 @@
-import { AnyAction } from "redux";
 import { APIData, APIRecommendationsData } from "../../types/APIData";
+import {
+  StoreAction,
+  StoreDataAction,
+  StoreSearchAction,
+  StoreUiAction,
+} from "../actions";
 
 export interface Store {
   data: StoreData;
@@ -20,6 +25,7 @@ export interface StoreData {
   currentAnime: APIData | null;
   currentIndex: Index;
   recommendationsArray: APIRecommendationsData[];
+  isInitialized: boolean;
 }
 
 export interface StoreUi {
@@ -47,6 +53,7 @@ const initialState: Store = {
     currentAnime: null,
     currentIndex: { page: 1, item: 0 },
     recommendationsArray: [],
+    isInitialized: false,
   },
   ui: {
     showError: false,
@@ -64,7 +71,11 @@ const initialState: Store = {
   },
 };
 
-type StoreKey = "data" | "ui" | "search";
+enum StoreKey {
+  data = "data",
+  search = "search",
+  ui = "ui",
+}
 
 const updateState = (
   state: Store,
@@ -78,81 +89,84 @@ const updateState = (
   },
 });
 
-const rootReducer = (state = initialState, action: AnyAction) => {
+const rootReducer = (state = initialState, action: StoreAction) => {
   switch (action.type) {
-    case "data/updateData": {
-      return updateState(state, "data", {
+    case StoreDataAction.isDataInitialized: {
+      return updateState(state, StoreKey.data, {
+        isInitialized: action.payload,
+      });
+    }
+    case StoreDataAction.updateData: {
+      return updateState(state, StoreKey.data, {
         queryResultArray: action.payload.data,
         queryResultSingleItem: action.payload.data[action.payload.item],
         queryID: action.payload.data[action.payload.item].mal_id,
       });
     }
-    case "data/updateQueryResultArray": {
-      return updateState(state, "data", {
+    case StoreDataAction.updateQueryResultArray: {
+      return updateState(state, StoreKey.data, {
         queryResultArray: [...action.payload],
       });
     }
-    case "data/updateQueryResultSingleItem": {
-      return updateState(state, "data", {
+    case StoreDataAction.updateQueryResultSingleItem: {
+      return updateState(state, StoreKey.data, {
         queryResultSingleItem: action.payload,
       });
     }
-    case "data/updateQuery": {
-      return updateState(state, "data", { query: action.payload });
+    case StoreDataAction.updateQuery: {
+      return updateState(state, StoreKey.data, { query: action.payload });
     }
-    case "data/updateQueryID": {
-      return updateState(state, "data", { queryID: action.payload });
+    case StoreDataAction.updateQueryID: {
+      return updateState(state, StoreKey.data, { queryID: action.payload });
     }
-    case "data/setCurrentAnime": {
-      return updateState(state, "data", {
+    case StoreDataAction.setCurrentAnime: {
+      return updateState(state, StoreKey.data, {
         currentAnime: action.payload,
       });
     }
-    case "data/setCurrentIndex": {
-      return updateState(state, "data", {
+    case StoreDataAction.setCurrentIndex: {
+      return updateState(state, StoreKey.data, {
         currentIndex: {
           page: action.payload.page,
           item: action.payload.item,
         },
       });
     }
-    case "data/setRecommendationsArray": {
-      return updateState(state, "data", {
+    case StoreDataAction.setRecommendationsArray: {
+      return updateState(state, StoreKey.data, {
         recommendationsArray: [...action.payload],
       });
     }
-    case "data/setSingleAnime": {
-      return updateState(state, "data", {
+    case StoreDataAction.setSingleAnime: {
+      return updateState(state, StoreKey.data, {
         recommendationsArray: [...action.payload.recommendations],
         currentAnime: action.payload.anime,
       });
     }
 
-    //search
-    case "search/updateSearch": {
+    case StoreSearchAction.updateSearch: {
       console.warn(action.payload);
-      return updateState(state, "search", {
+      return updateState(state, StoreKey.search, {
         [action.payload.key]: action.payload.value,
       });
     }
 
-    //ui
-    case "ui/showModal": {
-      return updateState(state, "ui", { showModal: action.payload });
+    case StoreUiAction.showModal: {
+      return updateState(state, StoreKey.ui, { showModal: action.payload });
     }
-    case "ui/showTrailer": {
-      return updateState(state, "ui", { showTrailer: action.payload });
+    case StoreUiAction.showTrailer: {
+      return updateState(state, StoreKey.ui, { showTrailer: action.payload });
     }
-    case "ui/showError": {
-      return updateState(state, "ui", { showError: action.payload });
+    case StoreUiAction.showError: {
+      return updateState(state, StoreKey.ui, { showError: action.payload });
     }
-    case "ui/showNav": {
-      return updateState(state, "ui", { showNav: action.payload });
+    case StoreUiAction.showNav: {
+      return updateState(state, StoreKey.ui, { showNav: action.payload });
     }
-    case "ui/showLoading": {
-      return updateState(state, "ui", { showLoading: action.payload });
+    case StoreUiAction.showLoading: {
+      return updateState(state, StoreKey.ui, { showLoading: action.payload });
     }
-    case "ui/handleError": {
+    case StoreUiAction.handleError: {
       return {
         ...state,
         data: {
@@ -166,7 +180,7 @@ const rootReducer = (state = initialState, action: AnyAction) => {
         },
       };
     }
-    case "ui/handleLoading": {
+    case StoreUiAction.handleLoading: {
       return {
         ...state,
         data: {

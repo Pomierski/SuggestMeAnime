@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { APIRecommendationsData } from "../../../types/APIData";
-import { ImageSize, getImage } from "../../../utility/getImage";
+import { ImageSize, getImage } from "../../../utils/getImage";
 import GalleryItem from "./GalleryItem";
 
 interface PropTypes {

@@ -1,14 +1,13 @@
 import { motion } from "framer-motion";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-// @ts-ignore
 import Select from "react-select";
 import styled from "styled-components";
 import * as jikanAPI from "../../api/jikanAPI";
 import { updateSearch } from "../../store/actions";
 import { fetchAnimeArray, toggleNav } from "../../store/functions";
 import { Store, StoreSearch } from "../../store/reducers";
-import { getRandomInt } from "../../utility/getRandomInt";
+import { getRandomInt } from "../../utils/getRandomInt";
 import Brand from "../Brand";
 import Button from "../Button";
 
@@ -101,12 +100,12 @@ const Navbar = ({ display }: PropTypes) => {
   };
 
   const createQuery = () => {
-    let query = `q=&min_score=6`;
-    Object.keys(search)
+    const initialQuery = `q=&min_score=6`;
+    const paramsArray = Object.keys(search)
       .filter((key) => key !== "order" && search[key as keyof StoreSearch])
-      .forEach((key) => {
-        query += `&${key}=${search[key as keyof StoreSearch]}`;
-      });
+      .map((key) => `&${key}=${search[key as keyof StoreSearch]}`)
+      .join();
+    const query = initialQuery.concat(paramsArray);
     fetchAnimeArray(query, 1, 0, search.order);
     toggleNav();
   };
@@ -121,8 +120,8 @@ const Navbar = ({ display }: PropTypes) => {
     toggleNav();
   };
 
-  const handleChange = (key: keyof StoreSearch, select: Option) => {
-    dispatch(updateSearch(key, select.value));
+  const handleChange = (key: keyof StoreSearch, select: Option | null) => {
+    dispatch(updateSearch(key, select?.value ?? ""));
   };
 
   return (
@@ -140,7 +139,7 @@ const Navbar = ({ display }: PropTypes) => {
               name={key}
               options={jikanAPI[key as keyof StoreSearch]}
               isClearable
-              onChange={(option: Option) =>
+              onChange={(option) =>
                 handleChange(key as keyof StoreSearch, option)
               }
             />

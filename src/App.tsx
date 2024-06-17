@@ -13,7 +13,7 @@ import * as actions from "./store/actions/index";
 import { fetchSingleAnime, toggleTrailer } from "./store/functions";
 import { Store, StoreUi } from "./store/reducers";
 import theme from "./styles/theme";
-import { getYoutubeEmberUrl } from "./utility/getYoutubeEmbedUrl";
+import { getYoutubeEmberUrl } from "./utils/getYoutubeEmbedUrl";
 
 const Container = styled.div<Partial<StoreUi>>`
   display: flex;
